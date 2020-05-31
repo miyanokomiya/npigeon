@@ -26,4 +26,10 @@ describe('git', () => {
       })
     })
   })
+
+  describe('gainPatch', () => {
+    it('gain patch', () => {
+      expect(target.gainPatch('v1.2.3')).toEqual('v1.2.4')
+    })
+  })
 })

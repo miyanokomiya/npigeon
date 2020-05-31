@@ -32,4 +32,16 @@ describe('git', () => {
       expect(target.gainPatch('v1.2.3')).toEqual('v1.2.4')
     })
   })
+
+  describe('gainMinor', () => {
+    it('gain minor', () => {
+      expect(target.gainMinor('v1.2.3')).toEqual('v1.3.0')
+    })
+  })
+
+  describe('gainMajor', () => {
+    it('gain major', () => {
+      expect(target.gainMajor('v1.2.3')).toEqual('v2.0.0')
+    })
+  })
 })

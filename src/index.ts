@@ -2,7 +2,7 @@
 
 import 'source-map-support/register'
 import meow from 'meow'
-import { getTags, getLatestTags } from './git'
+import { getTags, getLatestTags, gainMajor, gainMinor, gainPatch } from './git'
 
 const help = `
 	Usage
@@ -11,8 +11,25 @@ const help = `
 	Options
 	  --help  Show help
 	  --version  Show version
-	  --from-tag  Show latest tag version
+
+	  --from-tag  Get latest version from tag (e.g. v1.2.3)
+	  --major  Update major version
+	  --minor  Update minor version
+	  --patch  Update patch version
 `
+
+type Pipe<T> = {
+  (): T
+  <U>(f: (x: T) => U): Pipe<U>
+}
+const pipe: <T>(x: T) => Pipe<T> = <T>(x: T) => (<U>(f?: (x: T) => U) => (f ? pipe(f(x)) : x)) as Pipe<T>
+
+function gainVersion(tag: string, flags: { major: boolean; minor: boolean; patch: boolean }): string {
+  if (flags.major) return gainMajor(tag)
+  if (flags.minor) return gainMinor(tag)
+  if (flags.patch) return gainPatch(tag)
+  return tag
+}
 
 export default async function main(): Promise<void> {
   const cli = meow(help, {
@@ -20,18 +37,29 @@ export default async function main(): Promise<void> {
       fromTag: {
         type: 'boolean',
       },
+      major: {
+        type: 'boolean',
+      },
+      minor: {
+        type: 'boolean',
+      },
+      patch: {
+        type: 'boolean',
+      },
     },
   })
 
-  if (cli.flags.fromTag) {
-    try {
+  try {
+    if (cli.flags.fromTag) {
       const tags = await getTags()
-      console.log(getLatestTags(tags))
-    } catch (e) {
-      console.error(e)
+      pipe(tags)(getLatestTags)((tag) => gainVersion(tag, cli.flags))(console.log)
+      return
     }
-  } else {
+
     cli.showHelp()
+    return
+  } catch (e) {
+    console.error(e)
   }
 }
 

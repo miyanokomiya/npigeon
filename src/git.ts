@@ -27,6 +27,25 @@ export function gainPatch(tag: string): string {
   })
 }
 
+export function gainMinor(tag: string): string {
+  const current = parseVersion(tag)
+  return toTag({
+    ...current,
+    minor: current.minor + 1,
+    patch: 0,
+  })
+}
+
+export function gainMajor(tag: string): string {
+  const current = parseVersion(tag)
+  return toTag({
+    ...current,
+    major: current.major + 1,
+    minor: 0,
+    patch: 0,
+  })
+}
+
 function parseVersion(tag: string): Version {
   const values = tag
     .replace(/v/, '')

@@ -20,6 +20,8 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
-  rules: {},
+  plugins: ['@typescript-eslint', 'jest'],
+  rules: {
+    'jest/consistent-test-it': ['error', { fn: 'it', withinDescribe: 'it' }],
+  },
 }

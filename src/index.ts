@@ -5,10 +5,10 @@ import 'source-map-support/register'
 // import * as commandLineArgs from 'command-line-args'
 import commandLineUsage from 'command-line-usage'
 
-async function main() {
+export default function main(): void {
   const sections = [
     {
-      header: 'A typical app',
+      header: 'npigeon',
       content: 'Generates something {italic very} important.',
     },
     {

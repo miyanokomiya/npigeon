@@ -1,11 +1,11 @@
 import main from './index'
 
-describe('text', () => {
-  it('text', () => {
+describe('index', () => {
+  it.skip('main', async () => {
     const spy = jest.spyOn(console, 'log').mockImplementation()
-    main()
+    await main()
     expect(spy).toHaveBeenCalledTimes(1)
-    expect(spy.mock.calls[0][0]).toMatch('npigeon')
+    expect(spy.mock.calls[0][0]).toMatch('Usage')
     spy.mockRestore()
   })
 })

@@ -1,33 +1,40 @@
 #!/usr/bin/env node
 
 import 'source-map-support/register'
-// import * as clc from 'cli-color'
-// import * as commandLineArgs from 'command-line-args'
-import commandLineUsage from 'command-line-usage'
+import meow from 'meow'
+import { getTags, getLatestTags } from './git'
 
-export default function main(): void {
-  const sections = [
-    {
-      header: 'npigeon',
-      content: 'Generates something {italic very} important.',
+const help = `
+	Usage
+	  $ npx npigeon <input>
+
+	Options
+	  --help  Show help
+	  --version  Show version
+	  --from-tag  Show latest tag version
+`
+
+export default async function main(): Promise<void> {
+  const cli = meow(help, {
+    flags: {
+      fromTag: {
+        type: 'boolean',
+      },
     },
-    {
-      header: 'Options',
-      optionList: [
-        {
-          name: 'input',
-          typeLabel: '{underline file}',
-          description: 'The input to process.',
-        },
-        {
-          name: 'help',
-          description: 'Print this usage guide.',
-        },
-      ],
-    },
-  ]
-  const usage = commandLineUsage(sections)
-  console.log(usage)
+  })
+
+  if (cli.flags.fromTag) {
+    try {
+      const tags = await getTags()
+      console.log(getLatestTags(tags))
+    } catch (e) {
+      console.error(e)
+    }
+  } else {
+    cli.showHelp()
+  }
 }
 
-main()
+if (process.env.NODE_ENV !== 'test') {
+  main()
+}

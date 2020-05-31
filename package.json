@@ -11,12 +11,13 @@
     "start": "ts-node src/index.ts",
     "build": "tsc --project .",
     "lint": "eslint '*/**/*.{js,ts,json}'",
-    "test": "jest"
+    "test": "NODE_ENV='test' jest"
   },
   "dependencies": {
     "cli-color": "^2.0.0",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.0",
+    "meow": "^7.0.1",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
